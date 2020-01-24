@@ -147,11 +147,35 @@ export default {
 }
 </script>
 <style scoped>
-form {
-  margin-bottom: 2rem;
-}
-
 .error-message {
   color: #d33c40;
+}
+
+label {
+  font-weight: 500;
+  font-size: 1.25rem;
+  display: block;
+  margin: 1rem 0 0.5rem;
+}
+
+input {
+  display: block;
+  border: 1px solid #dedede;
+  border-radius: 4px;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  width: 100%;
+  max-width: 100%;
+}
+
+button {
+  background: #0d8c80;
+  border-radius: 5px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.75rem 1.25rem;
+  cursor: pointer;
 }
 </style>

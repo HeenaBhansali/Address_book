@@ -35,3 +35,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+#app {
+  padding: 0 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 600px;
+}
+</style>
