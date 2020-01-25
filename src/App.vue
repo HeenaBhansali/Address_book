@@ -2,7 +2,7 @@
   <div id="app">
     <h1>Address Book</h1>
     <AddContact @add:contact="addContact" />
-    <ContactList :contacts="contacts" @show:contact="showContact" />
+    <ContactList :contacts="contacts" @show:contact="setCurrentContact" />
     <ContactDetails :contact="currentContact" />
   </div>
 </template>
@@ -11,6 +11,7 @@
 import AddContact from "./components/AddContact.vue"
 import ContactList from "./components/ContactList.vue"
 import ContactDetails from "./components/ContactDetails.vue"
+import { getContacts, setContacts, generateId } from "./utils/utils.js"
 
 export default {
   name: "app",
@@ -22,38 +23,20 @@ export default {
 
   data() {
     return {
-      contacts: {},
+      contacts: getContacts(),
       currentContact: null
     }
   },
 
-  mounted() {
-    this.getContacts()
-  },
-
   methods: {
-    getContacts() {
-      this.contacts = JSON.parse(localStorage.getItem("contacts")) || {}
-    },
-
     addContact(contact) {
-      let id = this.generateId()
+      let id = generateId()
       this.contacts = { ...this.contacts, [id]: contact }
-      localStorage.setItem("contacts", JSON.stringify(this.contacts))
+      setContacts(this.contacts)
     },
 
-    showContact(id) {
-      console.log(id)
-      console.log("contacts", this.contacts[id])
+    setCurrentContact(id) {
       this.currentContact = this.contacts[id]
-    },
-
-    generateId() {
-      return (
-        Math.random()
-          .toString(36)
-          .substring(2) + new Date().getTime().toString(36)
-      )
     }
   }
 }

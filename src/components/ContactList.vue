@@ -12,12 +12,12 @@
       </thead>
       <tbody>
         <tr
-          v-for="(contact, contactId) in contacts"
+          v-for="contactId in orderedContacts"
           v-bind:key="contactId"
           @click="$emit('show:contact', contactId)"
         >
-          <td>{{ contact.firstName }}</td>
-          <td>{{ contact.phoneNo }}</td>
+          <td>{{ contacts[contactId].firstName }}</td>
+          <td>{{ contacts[contactId].phoneNo }}</td>
         </tr>
       </tbody>
     </table>
@@ -29,6 +29,19 @@ export default {
   name: "contacts",
   props: {
     contacts: Object
+  },
+  computed: {
+    orderedContacts() {
+      let contactIds = Object.keys(this.contacts)
+      return contactIds.sort((c1, c2) => {
+        if (
+          this.contacts[c1].firstName.toLowerCase() >
+          this.contacts[c2].firstName.toLowerCase()
+        )
+          return 1
+        return -1
+      })
+    }
   }
 }
 </script>
