@@ -1,15 +1,15 @@
 <template>
   <div id="contact-form">
-    <form @submit="handleSubmit">
+    <form @submit="handleSubmit" novalidate="true">
       <label>First Name</label>
       <input
         ref="first"
         name="firstname"
         type="text"
-        v-model="firstName"
+        v-model.trim="$v.firstName.$model"
         placeholder="Enter first name"
       />
-      <p v-if="errors.firstName === true">First Name cannot be empty</p>
+      <p v-if="$v.firstName.$error">First Name cannot be empty</p>
 
       <label>Last Name</label>
       <input
@@ -17,29 +17,37 @@
         name="lastname"
         type="text"
         v-model="lastName"
+        v-model.trim="$v.lastName.$model"
         placeholder="Enter last name"
       />
-      <p v-if="errors.lastName === true">Last Name cannot be empty</p>
+      <p v-if="$v.lastName.$error">Last Name cannot be empty</p>
 
       <label>Email address</label>
-      <input v-model="emailId" type="email" placeholder="Enter email" />
-      <p v-if="errors.emailId === true">Email address cannot be empty</p>
+      <input
+        v-model="$v.emailId.$model"
+        type="email"
+        placeholder="Enter email"
+      />
+      <p v-if="$v.emailId.$error">Email address cannot be empty</p>
 
       <label>Phone Number</label>
-      <input v-model="phoneNo" type="text" placeholder="Enter Phone No" />
-      <p v-if="errors.phoneNo === true">Phone Number cannot be empty</p>
+      <input
+        v-model="$v.phoneNo.$model"
+        type="text"
+        placeholder="Enter Phone No"
+      />
+      <p v-if="$v.phoneNo.$error">Phone Number cannot be empty</p>
 
       <label>Notes</label>
       <input v-model="notes" type="text" placeholder="Enter Notes" />
 
       <label>Date of birth </label>
       <input
-        v-model="dateOfBirth"
+        v-model="$v.dateOfBirth.$model"
         type="date"
-        required
         placeholder="Enter DOB"
       />
-      <p v-if="errors.dateOfBirth === true">Enter Date of Birth</p>
+      <p v-if="$v.dateOfBirth.$error">Enter Date of Birth</p>
 
       <button>Add Contact</button>
     </form>
@@ -47,7 +55,12 @@
 </template>
 
 <script>
+import { required, email } from "vuelidate/lib/validators"
+import { validationMixin } from "vuelidate"
+
 export default {
+  mixins: [validationMixin],
+
   name: "contact-form",
   data() {
     return {
@@ -62,27 +75,32 @@ export default {
       phoneNo: ""
     }
   },
+  validations: {
+    firstName: {
+      required
+    },
+    lastName: {
+      required
+    },
+    emailId: {
+      email,
+      required
+    },
+    phoneNo: {
+      required,
+      minValue: 0,
+      maxValue: 12
+    },
+    dateOfBirth: {
+      required,
+      maxValue: value => value < new Date().toISOString().slice(0, 10)
+    }
+  },
   methods: {
     handleSubmit(e) {
       e.preventDefault()
-      const requiredFields = [
-        "firstName",
-        "lastName",
-        "emailId",
-        "dateOfBirth",
-        "phoneNo"
-      ]
-
-      for (const field of requiredFields) {
-        this.errors[field] = false
-      }
-
-      for (const field of requiredFields) {
-        if (this[field] === "") this.errors[field] = true
-        else this.errors[field] = false
-      }
-
-      if (!Object.values(this.errors).includes(true))
+      this.$v.$touch()
+      if (!this.$v.$invalid) {
         this.$emit("add:contact", {
           firstName: this.firstName,
           lastName: this.lastName,
@@ -91,19 +109,8 @@ export default {
           notes: this.notes,
           phoneNo: this.phoneNo
         })
-      this.$refs.first.focus()
-      if (Object.values(this.errors).includes(true)) this.isError = true
-
-      if (!Object.values(this.errors).includes(true)) {
-        this.firstName = ""
-        this.lastName = ""
-        this.emailId = ""
-        this.note = ""
-        this.dateOfBirth = ""
-        this.phoneNo = ""
-      } else {
-        this.isError = true
       }
+      this.$refs.first.focus()
     }
   }
 }
