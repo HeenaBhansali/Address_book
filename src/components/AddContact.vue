@@ -1,68 +1,45 @@
 <template>
   <div id="contact-form">
-    <form @submit.prevent="handleSubmit">
+    <form @submit="handleSubmit">
       <label>First Name</label>
       <input
         ref="first"
+        name="firstname"
         type="text"
-        :class="{ 'has-error': submitting && invalidFirstName }"
-        v-model="user.firstName"
-        @focus="clearStatus"
-        @keypress="clearStatus"
+        v-model="firstName"
         placeholder="Enter first name"
       />
+      <p v-if="errors.firstName === true">First Name cannot be empty</p>
 
       <label>Last Name</label>
       <input
         ref="last"
+        name="lastname"
         type="text"
-        :class="{ 'has-error': submitting && invalidLastName }"
-        v-model="user.lastName"
-        @focus="clearStatus"
-        @keypress="clearStatus"
+        v-model="lastName"
         placeholder="Enter last name"
       />
+      <p v-if="errors.lastName === true">Last Name cannot be empty</p>
 
       <label>Email address</label>
-      <input
-        :class="{ 'has-error': submitting && invalidEmail }"
-        v-model="user.emailId"
-        type="email"
-        placeholder="Enter email"
-        @focus="clearStatus"
-      />
+      <input v-model="emailId" type="email" placeholder="Enter email" />
+      <p v-if="errors.emailId === true">Email address cannot be empty</p>
 
       <label>Phone Number</label>
-      <input
-        :class="{ 'has-error': submitting && invalidPhoneNo }"
-        v-model="user.phoneNo"
-        type="text"
-        placeholder="Enter Phone No"
-        @focus="clearStatus"
-      />
+      <input v-model="phoneNo" type="text" placeholder="Enter Phone No" />
+      <p v-if="errors.phoneNo === true">Phone Number cannot be empty</p>
 
       <label>Notes</label>
-      <input
-        :class="{ 'has-error': submitting && invalidNotes }"
-        v-model="user.notes"
-        type="text"
-        placeholder="Enter Notes"
-        @focus="clearStatus"
-      />
+      <input v-model="notes" type="text" placeholder="Enter Notes" />
 
       <label>Date of birth </label>
       <input
-        :class="{ 'has-error': submitting && invalidDOB }"
-        v-model="user.dateOfBirth"
+        v-model="dateOfBirth"
         type="date"
         required
         placeholder="Enter DOB"
-        @focus="clearStatus"
       />
-
-      <p v-if="error && submitting" class="error-message">
-        ❗Please fill out all required fields
-      </p>
+      <p v-if="errors.dateOfBirth === true">Enter Date of Birth</p>
 
       <button>Add Contact</button>
     </form>
@@ -74,74 +51,59 @@ export default {
   name: "contact-form",
   data() {
     return {
-      error: false,
-      submitting: false,
+      errors: {},
+      isError: false,
       success: false,
-      user: {
-        firstName: "",
-        lastName: "",
-        emailId: "",
-        notes: "",
-        dateOfBirth: "",
-        phoneNo: ""
-      }
+      firstName: "",
+      lastName: "",
+      emailId: "",
+      notes: "",
+      dateOfBirth: "",
+      phoneNo: ""
     }
   },
-  computed: {
-    invalidFirstName() {
-      return this.user.firstName === ""
-    },
-    invalidLastName() {
-      return this.user.lastName === ""
-    },
-    invalidEmail() {
-      return this.user.emailId === ""
-    },
-    invalidPhoneNo() {
-      return this.user.phoneNo === ""
-    },
-    invalidNotes() {
-      return this.user.notes === ""
-    },
-    invalidDOB() {
-      return this.user.dateOfBirth === ""
-    }
-  },
-
   methods: {
-    handleSubmit() {
-      this.clearStatus()
-      this.submitting = true
+    handleSubmit(e) {
+      e.preventDefault()
+      const requiredFields = [
+        "firstName",
+        "lastName",
+        "emailId",
+        "dateOfBirth",
+        "phoneNo"
+      ]
 
-      if (
-        this.invalidFirstName ||
-        this.invalidLastName ||
-        this.invalidEmail ||
-        this.invalidPhoneNo ||
-        this.invalidNotes ||
-        this.invalidDOB
-      ) {
-        this.error = true
-        return
+      for (const field of requiredFields) {
+        this.errors[field] = false
       }
 
-      this.$emit("add:contact", this.user)
+      for (const field of requiredFields) {
+        if (this[field] === "") this.errors[field] = true
+        else this.errors[field] = false
+      }
+
+      if (!Object.values(this.errors).includes(true))
+        this.$emit("add:contact", {
+          firstName: this.firstName,
+          lastName: this.lastName,
+          emailId: this.emailId,
+          dateOfBirth: this.dateOfBirth,
+          notes: this.notes,
+          phoneNo: this.phoneNo
+        })
       this.$refs.first.focus()
-      this.user = {
-        firstName: "",
-        lastName: "",
-        emailId: "",
-        notes: "",
-        dateOfBirth: "",
-        phoneNo: ""
-      }
-      this.clearStatus()
-      this.submitting = false
-    },
+      if (Object.values(this.errors).includes(true)) this.isError = true
 
-    clearStatus() {
-      this.success = false
-      this.error = false
+      if (!Object.values(this.errors).includes(true)) {
+        this.firstName = ""
+        this.lastName = ""
+        this.emailId = ""
+        this.note = ""
+        this.dateOfBirth = ""
+        this.phoneNo = ""
+      } else {
+        this.isError = true
+      }
     }
   }
 }
