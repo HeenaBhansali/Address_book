@@ -6,7 +6,7 @@
         ref="first"
         type="text"
         :class="{ 'has-error': submitting && invalidFirstName }"
-        v-model="user.fname"
+        v-model="user.firstName"
         @focus="clearStatus"
         @keypress="clearStatus"
         placeholder="Enter first name"
@@ -17,7 +17,7 @@
         ref="last"
         type="text"
         :class="{ 'has-error': submitting && invalidLastName }"
-        v-model="user.lname"
+        v-model="user.lastName"
         @focus="clearStatus"
         @keypress="clearStatus"
         placeholder="Enter last name"
@@ -26,7 +26,7 @@
       <label>Email address</label>
       <input
         :class="{ 'has-error': submitting && invalidEmail }"
-        v-model="user.email"
+        v-model="user.emailId"
         type="email"
         placeholder="Enter email"
         @focus="clearStatus"
@@ -53,7 +53,7 @@
       <label>Date of birth </label>
       <input
         :class="{ 'has-error': submitting && invalidDOB }"
-        v-model="user.dob"
+        v-model="user.dateOfBirth"
         type="date"
         required
         placeholder="Enter DOB"
@@ -78,24 +78,24 @@ export default {
       submitting: false,
       success: false,
       user: {
-        fname: "",
-        lname: "",
-        email: "",
+        firstName: "",
+        lastName: "",
+        emailId: "",
         notes: "",
-        dob: "",
+        dateOfBirth: "",
         phoneNo: ""
       }
     }
   },
   computed: {
     invalidFirstName() {
-      return this.user.fname === ""
+      return this.user.firstName === ""
     },
     invalidLastName() {
-      return this.user.lname === ""
+      return this.user.lastName === ""
     },
     invalidEmail() {
-      return this.user.email === ""
+      return this.user.emailId === ""
     },
     invalidPhoneNo() {
       return this.user.phoneNo === ""
@@ -104,7 +104,7 @@ export default {
       return this.user.notes === ""
     },
     invalidDOB() {
-      return this.user.dob === ""
+      return this.user.dateOfBirth === ""
     }
   },
 
@@ -128,12 +128,12 @@ export default {
       this.$emit("add:contact", this.user)
       this.$refs.first.focus()
       this.user = {
-        fname: "",
-        lname: "",
-        email: "",
-        dob: "",
-        phoneNo: "",
-        notes: ""
+        firstName: "",
+        lastName: "",
+        emailId: "",
+        notes: "",
+        dateOfBirth: "",
+        phoneNo: ""
       }
       this.clearStatus()
       this.submitting = false
