@@ -1,5 +1,6 @@
 <template>
-  <div id="contacts">
+  <div id="contact-list">
+    <h1>Contacts</h1>
     <p v-if="Object.keys(contacts).length < 1" class="empty-list">
       No Contacts
     </p>
@@ -7,7 +8,7 @@
       <thead>
         <tr>
           <th>First Name</th>
-          <th>Phone No</th>
+          <th>Phone Number</th>
         </tr>
       </thead>
       <tbody>
@@ -17,7 +18,7 @@
           @click="$emit('show:contact', contactId)"
         >
           <td>{{ contacts[contactId].firstName }}</td>
-          <td>{{ contacts[contactId].phoneNo }}</td>
+          <td>{{ contacts[contactId].phoneNumber }}</td>
         </tr>
       </tbody>
     </table>
@@ -26,7 +27,7 @@
 
 <script>
 export default {
-  name: "contacts",
+  name: "contact-list",
   props: {
     contacts: Object
   },
@@ -45,3 +46,12 @@ export default {
   }
 }
 </script>
+
+<style>
+#contact-list {
+  margin: 20px;
+  padding: 20px;
+  margin-left: 0;
+  border: 1px solid black;
+}
+</style>

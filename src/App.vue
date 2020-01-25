@@ -1,9 +1,13 @@
 <template>
   <div id="app">
     <h1>Address Book</h1>
-    <AddContact @add:contact="addContact" />
+    <AddContact @add:contact="addContact" @edit:contact="editContact" />
     <ContactList :contacts="contacts" @show:contact="setCurrentContact" />
-    <ContactDetails :contact="currentContact" />
+    <ContactDetails
+      :contact="currentContact"
+      @delete:contact="deleteContact"
+      :editContact="editContact"
+    />
   </div>
 </template>
 
@@ -30,13 +34,30 @@ export default {
 
   methods: {
     addContact(contact) {
-      let id = generateId()
+      const id = generateId()
+      contact.id = id
       this.contacts = { ...this.contacts, [id]: contact }
       setContacts(this.contacts)
     },
 
     setCurrentContact(id) {
       this.currentContact = this.contacts[id]
+    },
+
+    editContact(id, editedContact) {
+      this.contacts[id] = editedContact
+      this.updateData()
+    },
+
+    deleteContact(id) {
+      delete this.contacts[id]
+      this.updateData()
+    },
+
+    updateData() {
+      setContacts(this.contacts)
+      this.contacts = getContacts()
+      this.currentContact = null
     }
   }
 }

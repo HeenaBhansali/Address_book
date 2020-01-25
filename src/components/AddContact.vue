@@ -6,56 +6,56 @@
         ref="first"
         name="firstname"
         type="text"
-        v-model.trim="$v.firstName.$model"
+        v-model.trim="$v.details.firstName.$model"
         placeholder="Enter first name"
       />
-      <p v-if="$v.firstName.$error">First Name cannot be empty</p>
+      <p v-if="$v.details.firstName.$error">Enter valid First Name</p>
 
       <label>Last Name</label>
       <input
         ref="last"
         name="lastname"
         type="text"
-        v-model="lastName"
-        v-model.trim="$v.lastName.$model"
+        v-model.trim="$v.details.lastName.$model"
         placeholder="Enter last name"
       />
-      <p v-if="$v.lastName.$error">Last Name cannot be empty</p>
+      <p v-if="$v.details.lastName.$error">Enter valid Last Name</p>
 
       <label>Email address</label>
       <input
-        v-model="$v.emailId.$model"
+        v-model="$v.details.emailId.$model"
         type="email"
         placeholder="Enter email"
       />
-      <p v-if="$v.emailId.$error">Email address cannot be empty</p>
+      <p v-if="$v.details.emailId.$error">Enter valid Email Address</p>
 
       <label>Phone Number</label>
       <input
-        v-model="$v.phoneNo.$model"
+        v-model="$v.details.phoneNumber.$model"
         type="text"
-        placeholder="Enter Phone No"
+        placeholder="Enter Phone Number"
       />
-      <p v-if="$v.phoneNo.$error">Phone Number cannot be empty</p>
+      <p v-if="$v.details.phoneNumber.$error">Enter valid Phone Number</p>
 
       <label>Notes</label>
-      <input v-model="notes" type="text" placeholder="Enter Notes" />
+      <input v-model="details.notes" type="text" placeholder="Enter Notes" />
 
       <label>Date of birth </label>
       <input
-        v-model="$v.dateOfBirth.$model"
+        v-model="$v.details.dateOfBirth.$model"
         type="date"
         placeholder="Enter DOB"
       />
-      <p v-if="$v.dateOfBirth.$error">Enter Date of Birth</p>
+      <p v-if="$v.details.dateOfBirth.$error">Enter valid Date of Birth</p>
 
-      <button>Add Contact</button>
+      <button v-if="!contactInfo">Add Contact</button>
+      <button type="button" v-else @click="editContact">Save</button>
     </form>
   </div>
 </template>
 
 <script>
-import { required, email } from "vuelidate/lib/validators"
+import { email, required } from "vuelidate/lib/validators"
 import { validationMixin } from "vuelidate"
 
 export default {
@@ -67,33 +67,41 @@ export default {
       errors: {},
       isError: false,
       success: false,
-      firstName: "",
-      lastName: "",
-      emailId: "",
-      notes: "",
-      dateOfBirth: "",
-      phoneNo: ""
+      details: this.contactInfo || {
+        firstName: "",
+        lastName: "",
+        emailId: "",
+        notes: "",
+        dateOfBirth: "",
+        phoneNumber: ""
+      }
     }
   },
+  props: {
+    contactInfo: Object
+  },
+
   validations: {
-    firstName: {
-      required
-    },
-    lastName: {
-      required
-    },
-    emailId: {
-      email,
-      required
-    },
-    phoneNo: {
-      required,
-      minValue: 0,
-      maxValue: 12
-    },
-    dateOfBirth: {
-      required,
-      maxValue: value => value < new Date().toISOString().slice(0, 10)
+    details: {
+      firstName: {
+        required
+      },
+      lastName: {
+        required
+      },
+      emailId: {
+        email,
+        required
+      },
+      phoneNumber: {
+        required,
+        minValue: 0,
+        maxValue: 12
+      },
+      dateOfBirth: {
+        required,
+        maxValue: value => value < new Date().toISOString().slice(0, 10)
+      }
     }
   },
   methods: {
@@ -102,20 +110,19 @@ export default {
       this.$v.$touch()
       if (!this.$v.$invalid) {
         this.$emit("add:contact", {
-          firstName: this.firstName,
-          lastName: this.lastName,
-          emailId: this.emailId,
-          dateOfBirth: this.dateOfBirth,
-          notes: this.notes,
-          phoneNo: this.phoneNo
+          ...this.details
         })
       }
       this.$refs.first.focus()
+    },
+    editContact() {
+      if (!this.$v.$invalid)
+        this.$emit("edit:contact", this.contactInfo.id, this.contactInfo)
     }
   }
 }
 </script>
-<style scoped>
+<style>
 .error-message {
   color: #d33c40;
 }
