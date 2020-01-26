@@ -55,7 +55,13 @@
 </template>
 
 <script>
-import { email, required } from "vuelidate/lib/validators"
+import {
+  email,
+  required,
+  minLength,
+  maxLength,
+  numeric
+} from "vuelidate/lib/validators"
 import { validationMixin } from "vuelidate"
 
 export default {
@@ -84,10 +90,12 @@ export default {
   validations: {
     details: {
       firstName: {
-        required
+        required,
+        maxLength: maxLength(50)
       },
       lastName: {
-        required
+        required,
+        maxLength: maxLength(50)
       },
       emailId: {
         email,
@@ -95,8 +103,9 @@ export default {
       },
       phoneNumber: {
         required,
-        minValue: 0,
-        maxValue: 12
+        numeric,
+        minLength: minLength(10),
+        maxLength: maxLength(12)
       },
       dateOfBirth: {
         required,
@@ -112,6 +121,14 @@ export default {
         this.$emit("add:contact", {
           ...this.details
         })
+        this.details = {
+          firstName: "",
+          lastName: "",
+          emailId: "",
+          notes: "",
+          dateOfBirth: "",
+          phoneNumber: ""
+        }
       }
       this.$refs.first.focus()
     },

@@ -2,7 +2,7 @@
   <div id="contact-details" v-if="contact !== null">
     <h1>Selected Contact Details</h1>
     <div v-if="editing">
-      <AddContact :contactInfo="contact" @edit:contact="editContact" />
+      <ContactForm :contactInfo="contact" @edit:contact="editContact" />
     </div>
 
     <div v-else>
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import AddContact from "./AddContact.vue"
+import ContactForm from "./ContactForm.vue"
 
 export default {
   name: "contact-details",
@@ -37,7 +37,7 @@ export default {
     editContact: Function
   },
   components: {
-    AddContact
+    ContactForm
   },
 
   data() {

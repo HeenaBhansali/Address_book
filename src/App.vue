@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h1>Address Book</h1>
-    <AddContact @add:contact="addContact" @edit:contact="editContact" />
+    <ContactForm @add:contact="addContact" @edit:contact="editContact" />
     <ContactList :contacts="contacts" @show:contact="setCurrentContact" />
     <ContactDetails
       :contact="currentContact"
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import AddContact from "./components/AddContact.vue"
+import ContactForm from "./components/ContactForm.vue"
 import ContactList from "./components/ContactList.vue"
 import ContactDetails from "./components/ContactDetails.vue"
 import { getContacts, setContacts, generateId } from "./utils/utils.js"
@@ -20,7 +20,7 @@ import { getContacts, setContacts, generateId } from "./utils/utils.js"
 export default {
   name: "app",
   components: {
-    AddContact,
+    ContactForm,
     ContactList,
     ContactDetails
   },
