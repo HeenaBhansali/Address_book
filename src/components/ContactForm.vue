@@ -9,7 +9,9 @@
         v-model.trim="$v.details.firstName.$model"
         placeholder="Enter first name"
       />
-      <p v-if="$v.details.firstName.$error">Enter valid First Name</p>
+      <p class="error-message" v-if="$v.details.firstName.$error">
+        Enter valid First Name
+      </p>
 
       <label>Last Name</label>
       <input
@@ -19,7 +21,9 @@
         v-model.trim="$v.details.lastName.$model"
         placeholder="Enter last name"
       />
-      <p v-if="$v.details.lastName.$error">Enter valid Last Name</p>
+      <p class="error-message" v-if="$v.details.lastName.$error">
+        Enter valid Last Name
+      </p>
 
       <label>Email address</label>
       <input
@@ -27,7 +31,9 @@
         type="email"
         placeholder="Enter email"
       />
-      <p v-if="$v.details.emailId.$error">Enter valid Email Address</p>
+      <p class="error-message" v-if="$v.details.emailId.$error">
+        Enter valid Email Address
+      </p>
 
       <label>Phone Number</label>
       <input
@@ -35,7 +41,9 @@
         type="text"
         placeholder="Enter Phone Number"
       />
-      <p v-if="$v.details.phoneNumber.$error">Enter valid Phone Number</p>
+      <p class="error-message" v-if="$v.details.phoneNumber.$error">
+        Enter valid Phone Number
+      </p>
 
       <label>Notes</label>
       <input v-model="details.notes" type="text" placeholder="Enter Notes" />
@@ -46,9 +54,11 @@
         type="date"
         placeholder="Enter DOB"
       />
-      <p v-if="$v.details.dateOfBirth.$error">Enter valid Date of Birth</p>
+      <p class="error-message" v-if="$v.details.dateOfBirth.$error">
+        Enter valid Date of Birth
+      </p>
 
-      <button type="button" v-else @click="editContact">Save</button>
+      <button type="button" @click="editContact">Save</button>
     </form>
   </div>
 </template>

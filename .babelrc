@@ -2,9 +2,7 @@
   "presets": ["@vue/cli-plugin-babel/preset"],
   "env": {
     "test": {
-      "presets": [
-        ["env", { "modules": false, "targets": { "node": "current" } }]
-      ]
+      "presets": [["env", { "targets": { "node": "current" } }]]
     }
   }
 }

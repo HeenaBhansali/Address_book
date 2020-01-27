@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { getContacts, setContacts } from "../utils/utils.js"
+import { getContacts } from "../utils/utils.js"
 
 export default {
   name: "contact-list",
@@ -40,14 +40,17 @@ export default {
   computed: {
     orderedContacts() {
       let contactIds = Object.keys(this.contacts)
-      return contactIds.sort((c1, c2) => {
-        if (
-          this.contacts[c1].firstName.toLowerCase() >
-          this.contacts[c2].firstName.toLowerCase()
-        )
-          return 1
-        return -1
-      })
+      if (contactIds.length > 0) {
+        return contactIds.sort((c1, c2) => {
+          if (
+            this.contacts[c1].firstName.toLowerCase() >
+            this.contacts[c2].firstName.toLowerCase()
+          )
+            return 1
+          return -1
+        })
+      }
+      return []
     }
   },
   methods: {
@@ -55,32 +58,15 @@ export default {
       this.$router.push({
         name: "contact-details",
         params: {
-          contact: { ...this.contacts[contactId] },
-          editContact: this.editContact
+          contact: { ...this.contacts[contactId] }
         }
       })
-    },
-
-    editContact(id, editedContact) {
-      this.contacts[id] = editedContact
-      this.updateData()
-    },
-
-    deleteContact(id) {
-      delete this.contacts[id]
-      this.updateData()
-    },
-
-    updateData() {
-      setContacts(this.contacts)
-      this.contacts = getContacts()
-      this.currentContact = null
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
 #contact-list {
   margin: 20px;
   padding: 20px;

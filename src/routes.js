@@ -10,7 +10,6 @@ export const routes = [
     name: "contact-details",
     component: ContactDetails,
     props: route => {
-      console.log(route.params)
       return route.params
     }
   }

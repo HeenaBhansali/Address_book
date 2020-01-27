@@ -9,37 +9,11 @@
 </template>
 
 <script>
-import { getContacts, setContacts } from "./utils/utils.js"
-
 export default {
   name: "app",
-  data() {
-    return {
-      contacts: getContacts(),
-      currentContact: null
-    }
-  },
-
   methods: {
     addContact() {
       this.$router.push({ path: "/add-contact" })
-    },
-    setCurrentContact(id) {
-      this.currentContact = this.contacts[id]
-    },
-    editContact(id, editedContact) {
-      this.contacts[id] = editedContact
-      this.updateData()
-    },
-    deleteContact(id) {
-      delete this.contacts[id]
-      this.updateData()
-    },
-
-    updateData() {
-      setContacts(this.contacts)
-      this.contacts = getContacts()
-      this.currentContact = null
     }
   }
 }
