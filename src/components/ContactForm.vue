@@ -48,7 +48,6 @@
       />
       <p v-if="$v.details.dateOfBirth.$error">Enter valid Date of Birth</p>
 
-      <button v-if="!contactInfo">Add Contact</button>
       <button type="button" v-else @click="editContact">Save</button>
     </form>
   </div>
@@ -63,6 +62,7 @@ import {
   numeric
 } from "vuelidate/lib/validators"
 import { validationMixin } from "vuelidate"
+import { saveContact } from "../utils/utils.js"
 
 export default {
   mixins: [validationMixin],
@@ -131,8 +131,10 @@ export default {
       this.$refs.first.focus()
     },
     editContact() {
-      if (!this.$v.$invalid)
-        this.$emit("edit:contact", this.contactInfo.id, this.contactInfo)
+      if (!this.$v.$invalid) {
+        saveContact(this.details)
+        this.$router.push({ path: "/" })
+      }
     }
   }
 }

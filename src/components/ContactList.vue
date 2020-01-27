@@ -15,7 +15,7 @@
         <tr
           v-for="contactId in orderedContacts"
           v-bind:key="contactId"
-          @click="$emit('show:contact', contactId)"
+          @click="() => showContact(contactId)"
         >
           <td>{{ contacts[contactId].firstName }}</td>
           <td>{{ contacts[contactId].phoneNumber }}</td>
@@ -26,11 +26,17 @@
 </template>
 
 <script>
+import { getContacts, setContacts } from "../utils/utils.js"
+
 export default {
   name: "contact-list",
-  props: {
-    contacts: Object
+  data() {
+    return {
+      contacts: getContacts(),
+      currentContact: null
+    }
   },
+
   computed: {
     orderedContacts() {
       let contactIds = Object.keys(this.contacts)
@@ -42,6 +48,33 @@ export default {
           return 1
         return -1
       })
+    }
+  },
+  methods: {
+    showContact(contactId) {
+      this.$router.push({
+        name: "contact-details",
+        params: {
+          contact: { ...this.contacts[contactId] },
+          editContact: this.editContact
+        }
+      })
+    },
+
+    editContact(id, editedContact) {
+      this.contacts[id] = editedContact
+      this.updateData()
+    },
+
+    deleteContact(id) {
+      delete this.contacts[id]
+      this.updateData()
+    },
+
+    updateData() {
+      setContacts(this.contacts)
+      this.contacts = getContacts()
+      this.currentContact = null
     }
   }
 }

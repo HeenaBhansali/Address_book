@@ -2,7 +2,7 @@
   <div id="contact-details" v-if="contact !== null">
     <h1>Selected Contact Details</h1>
     <div v-if="editing">
-      <ContactForm :contactInfo="contact" @edit:contact="editContact" />
+      <ContactForm :contactInfo="contact" />
     </div>
 
     <div v-else>
@@ -15,12 +15,19 @@
     </div>
 
     <div v-if="editing">
-      <button @click="editing = false">Cancel</button>
+      <button
+        @click="
+          editing = false
+          resetFields()
+        "
+      >
+        Cancel
+      </button>
     </div>
 
     <div v-else>
       <button @click="toggleEditMode">Edit</button>
-      <button @click="$emit('delete:contact', contact.id)">
+      <button @click="removeContact">
         Delete
       </button>
     </div>
@@ -29,15 +36,21 @@
 
 <script>
 import ContactForm from "./ContactForm.vue"
+import { deleteContact, getContactById } from "../utils/utils.js"
 
 export default {
   name: "contact-details",
   props: {
-    contact: Object,
-    editContact: Function
+    contact: Object
   },
   components: {
     ContactForm
+  },
+  mounted() {
+    if (!this.contact)
+      this.$router.push({
+        path: "/"
+      })
   },
 
   data() {
@@ -46,6 +59,13 @@ export default {
     }
   },
   methods: {
+    removeContact() {
+      deleteContact(this.contact.id)
+      this.$router.push({ path: "/" })
+    },
+    resetFields() {
+      this.contact = getContactById(this.contact.id)
+    },
     toggleEditMode() {
       this.editing = true
     }
