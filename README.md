@@ -18,13 +18,6 @@ npm run serve
 npm run build
 ```
 
-### Lints and fixes files
-
-```
-npm run lint
-```
-
-## Requirements
 
 ### Functionalities
 
@@ -38,15 +31,16 @@ npm run lint
 - Phone Number
 - Notes
 - Date of birth
-- Custom user defined field. (optional)
 
 ### Validation
 
-- Validate all user input field
+- Validates all user input field
 
 ### Testing
 
-- Write automated test cases
+```
+npm run test
+```
 
 
 ***Hosted At:*** [https://vue-address-book.netlify.com](https://vue-address-book.netlify.com)
